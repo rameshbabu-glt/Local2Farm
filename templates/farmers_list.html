@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Registered Farmers - Local2Farm Admin{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-success mb-1">
+                <i class="bi bi-person-lines-fill me-2"></i> Registered Farmers Directory
+            </h3>
+            <p class="text-muted small mb-0">Overview of all registered farming community members using Local2Farm</p>
+        </div>
+        <span class="badge bg-success-subtle text-success fs-6 px-3 py-2">
+            Total: {{ farmers|length }} Farmer(s)
+        </span>
+    </div>
+
+    <!-- Farmers Table -->
+    <div class="card card-l2f shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th># ID</th>
+                            <th>Farmer Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Village / Town</th>
+                            <th>District</th>
+                            <th>State</th>
+                            <th>Crop Requests</th>
+                            <th>Joined Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in farmers %}
+                        <tr>
+                            <td class="fw-bold">#{{ f.id }}</td>
+                            <td>
+                                <strong>{{ f.name }}</strong>
+                            </td>
+                            <td>{{ f.mobile }}</td>
+                            <td>{{ f.email }}</td>
+                            <td>{{ f.location }}</td>
+                            <td>{{ f.district }}</td>
+                            <td>{{ f.state }}</td>
+                            <td>
+                                <span class="badge bg-success-subtle text-success fs-6">{{ f.requests|length }}</span>
+                            </td>
+                            <td class="small text-muted">{{ f.created_at.strftime('%d-%m-%Y') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Sell My Crop - Local2Farm AI Agent{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Form Card -->
+            <div class="card card-l2f shadow-sm border-0">
+                <div class="card-header bg-success text-white py-3 rounded-top-3">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-white text-success me-3" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0">Sell My Crop</h4>
+                            <small class="text-white-50">Enter harvest details to receive AI decision support and market comparisons</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('farmer.sell_crop') }}" id="sellCropForm">
+                        <div class="row g-3">
+                            <!-- Crop Name -->
+                            <div class="col-md-6">
+                                <label for="crop_name" class="form-label fw-bold">
+                                    <i class="bi bi-flower2 text-success me-1"></i> Crop Name <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select form-select-lg" id="crop_name" name="crop_name" required>
+                                    <option value="" disabled selected>-- Select Harvested Crop --</option>
+                                    {% for crop in crops %}
+                                        <option value="{{ crop }}">{{ crop }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-text">Choose from our supported vegetable varieties.</div>
+                            </div>
+
+                            <!-- Quantity in kg -->
+                            <div class="col-md-6">
+                                <label for="quantity" class="form-label fw-bold">
+                                    <i class="bi bi-box-seam text-success me-1"></i> Quantity (in kg) <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <input type="number" class="form-control" id="quantity" name="quantity" required min="10" step="10" placeholder="e.g. 1000">
+                                    <span class="input-group-text bg-light fw-bold">kg</span>
+                                </div>
+                                <div class="form-text">E.g., 1000 kg = 10 quintals / 1 Metric Ton.</div>
+                            </div>
+
+                            <!-- Farmer Location -->
+                            <div class="col-12">
+                                <label for="location" class="form-label fw-bold">
+                                    <i class="bi bi-geo-alt text-success me-1"></i> Farmer Location (Village / Hub) <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="location" name="location" required value="{{ farmer.location }}" placeholder="e.g. Vijayawada, Guntur, Tenali">
+                                <div class="form-text">Used to estimate road distance and freight charges.</div>
+                            </div>
+
+                            <!-- Harvest Date -->
+                            <div class="col-md-6">
+                                <label for="harvest_date" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-check text-success me-1"></i> Harvest Date <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" class="form-control" id="harvest_date" name="harvest_date" required value="{{ default_harvest }}">
+                                <div class="form-text">When was or when will the crop be harvested?</div>
+                            </div>
+
+                            <!-- Expected Selling Date -->
+                            <div class="col-md-6">
+                                <label for="selling_date" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-event text-success me-1"></i> Expected Selling Date <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" class="form-control" id="selling_date" name="selling_date" required value="{{ default_selling }}">
+                                <div class="form-text">When do you expect the buyer/market to receive it?</div>
+                            </div>
+
+                            <hr class="my-4 text-muted">
+
+                            <!-- Optional Parameters Section -->
+                            <h6 class="fw-bold text-success mb-2">
+                                <i class="bi bi-sliders me-1"></i> Logistics & Storage Details (Optional)
+                            </h6>
+
+                            <!-- Maximum Transport Distance -->
+                            <div class="col-md-6">
+                                <label for="max_distance" class="form-label fw-bold">Maximum Transport Distance (km)</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="max_distance" name="max_distance" value="100" min="5" max="300" step="5">
+                                    <span class="input-group-text bg-light">km</span>
+                                </div>
+                                <div class="form-text">Max road distance you are willing to travel.</div>
+                            </div>
+
+                            <!-- Storage Availability -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Storage / Cold Facility Available?</label>
+                                <div class="d-flex gap-4 pt-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="storage_available" id="storage_no" value="no" checked>
+                                        <label class="form-check-label" for="storage_no">
+                                            No (Open air / Normal)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="storage_available" id="storage_yes" value="yes">
+                                        <label class="form-check-label" for="storage_yes">
+                                            Yes (Cold / Ventilated)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-text">Helps AI assess waste & spoilage risk accurately.</div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mt-4 pt-2">
+                            <button type="submit" class="btn btn-l2f btn-lg shadow">
+                                <i class="bi bi-cpu-fill me-2"></i> Run Local2Farm AI Agent Analysis
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Workflow Summary / Reassurance Card -->
+            <div class="card bg-white mt-3 p-3 border-0 shadow-sm rounded-3">
+                <div class="d-flex align-items-start">
+                    <i class="bi bi-shield-check text-success fs-3 me-3 mt-1"></i>
+                    <div>
+                        <strong class="d-block text-dark">Decision Support Guarantee:</strong>
+                        <span class="small text-muted">
+                            Submitting this form does <strong>not</strong> trigger an automatic purchase, payment, or contract. 
+                            The AI Agent will simply analyze market options and explain the trade-offs so you can decide what is best for your harvest.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

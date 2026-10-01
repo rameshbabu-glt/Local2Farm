@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}Farmer Dashboard - Local2Farm{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Header -->
+    <div class="card card-l2f p-4 mb-4 border-start border-5 border-success">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <span class="badge bg-success-subtle text-success fw-bold px-3 py-1 rounded-pill mb-2">
+                    <i class="bi bi-geo-alt-fill"></i> {{ farmer.location }}, {{ farmer.district }} ({{ farmer.state }})
+                </span>
+                <h2 class="fw-bold text-success mb-1">
+                    Welcome, {{ farmer.name }}! 🌾
+                </h2>
+                <p class="text-muted mb-0 small">
+                    Use Local2Farm to get AI-powered decision support on where to sell your harvest for the best net income.
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('farmer.sell_crop') }}" class="btn btn-l2f btn-l2f-lg shadow-sm">
+                    <i class="bi bi-plus-circle me-1"></i> Sell My Crop
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Navigation Action Bar -->
+    <div class="row g-2 mb-4">
+        <div class="col-6 col-md-3">
+            <a href="{{ url_for('farmer.sell_crop') }}" class="btn btn-outline-success w-100 py-2 fw-semibold">
+                <i class="bi bi-cart-plus me-1"></i> Sell My Crop
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="{{ url_for('farmer.history') }}" class="btn btn-outline-success w-100 py-2 fw-semibold">
+                <i class="bi bi-clock-history me-1"></i> Previous Results
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="{{ url_for('farmer.profile') }}" class="btn btn-outline-success w-100 py-2 fw-semibold">
+                <i class="bi bi-person-circle me-1"></i> Profile
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger w-100 py-2 fw-semibold">
+                <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Dashboard Stat Cards -->
+    <div class="row g-3 mb-4">
+        <!-- Card 1: Total Requests -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card d-flex align-items-center">
+                <div class="stat-icon me-3">
+                    <i class="bi bi-journal-check"></i>
+                </div>
+                <div>
+                    <div class="stat-value">{{ total_requests }}</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Recent Request -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card d-flex align-items-center" style="border-left-color: #f9a825;">
+                <div class="stat-icon me-3" style="background: #fff8e1; color: #f57f17;">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div>
+                    <div class="stat-value" style="font-size: 1.3rem; color: #f57f17;">
+                        {% if recent_request %}
+                            {{ recent_request.crop_name }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </div>
+                    <div class="stat-label">
+                        {% if recent_request %}
+                            {{ recent_request.quantity|int }} kg (Recent)
+                        {% else %}
+                            Recent Request
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Available Markets -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card d-flex align-items-center" style="border-left-color: #0288d1;">
+                <div class="stat-icon me-3" style="background: #e1f5fe; color: #0288d1;">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <div>
+                    <div class="stat-value" style="color: #0288d1;">{{ total_markets }}</div>
+                    <div class="stat-label">Available Markets</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Available Buyers -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card d-flex align-items-center" style="border-left-color: #7b1fa2;">
+                <div class="stat-icon me-3" style="background: #f3e5f5; color: #7b1fa2;">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div>
+                    <div class="stat-value" style="color: #7b1fa2;">{{ total_buyers }}</div>
+                    <div class="stat-label">Available Buyers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Selling Requests Table -->
+    <div class="card card-l2f mb-4">
+        <div class="card-header card-header-l2f d-flex justify-content-between align-items-center py-3">
+            <h5 class="fw-bold mb-0"><i class="bi bi-list-task me-2"></i>My Recent Crop Requests</h5>
+            <a href="{{ url_for('farmer.history') }}" class="btn btn-sm btn-outline-success">View All</a>
+        </div>
+        <div class="card-body p-0">
+            {% if recent_requests %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th># ID</th>
+                                <th>Crop</th>
+                                <th>Quantity</th>
+                                <th>Location</th>
+                                <th>Harvest Date</th>
+                                <th>Selling Date</th>
+                                <th>Your Selection</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in recent_requests %}
+                            <tr>
+                                <td class="fw-bold">#{{ req.id }}</td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success fs-6">{{ req.crop_name }}</span>
+                                </td>
+                                <td>{{ req.quantity|int }} kg</td>
+                                <td>{{ req.location }}</td>
+                                <td>{{ req.harvest_date }}</td>
+                                <td>{{ req.selling_date }}</td>
+                                <td>
+                                    {% if req.selected_option %}
+                                        <span class="badge bg-success text-white">
+                                            <i class="bi bi-check2"></i> {{ req.selected_option }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-subtle text-dark">Pending Decision</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('farmer.results', request_id=req.id) }}" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-eye"></i> View Analysis
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-5 text-center text-muted">
+                    <i class="bi bi-inbox fs-1 text-secondary mb-2 d-block"></i>
+                    <h6>No crop selling requests submitted yet.</h6>
+                    <p class="small">Click the button below to start your first crop comparison!</p>
+                    <a href="{{ url_for('farmer.sell_crop') }}" class="btn btn-l2f btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Sell My Crop
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Helpful Farmer Advice Callout -->
+    <div class="card bg-light border-0 p-3 rounded-3">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-lightbulb-fill text-warning fs-3 me-3"></i>
+            <div>
+                <strong class="d-block text-dark">Tip for Farmers:</strong>
+                <span class="small text-muted">
+                    Selling to a local buyer within 10 km often produces higher net profit than driving 50 km to a mandi, 
+                    because transportation costs and vegetable spoilage easily eat away the extra ₹2-₹3 per kg.
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

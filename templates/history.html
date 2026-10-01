@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Previous Selling Results - Local2Farm{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold text-success mb-1">
+                <i class="bi bi-clock-history me-2"></i> Previous Selling Requests & Results
+            </h3>
+            <p class="text-muted small mb-0">View all your past crop analysis and saved selling decisions</p>
+        </div>
+        <div class="mt-2 mt-md-0">
+            <a href="{{ url_for('farmer.sell_crop') }}" class="btn btn-l2f">
+                <i class="bi bi-plus-circle me-1"></i> New Crop Analysis
+            </a>
+        </div>
+    </div>
+
+    <!-- Requests Table -->
+    <div class="card card-l2f shadow-sm border-0">
+        <div class="card-body p-0">
+            {% if requests %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th># Request ID</th>
+                                <th>Crop</th>
+                                <th>Quantity</th>
+                                <th>Location</th>
+                                <th>Harvest Date</th>
+                                <th>Expected Sale</th>
+                                <th>Saved Decision</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in requests %}
+                            <tr>
+                                <td class="fw-bold">#{{ req.id }}</td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success fs-6">{{ req.crop_name }}</span>
+                                </td>
+                                <td>{{ req.quantity|int }} kg</td>
+                                <td>{{ req.location }}</td>
+                                <td>{{ req.harvest_date }}</td>
+                                <td>{{ req.selling_date }}</td>
+                                <td>
+                                    {% if req.selected_option %}
+                                        <span class="badge bg-success text-white">
+                                            <i class="bi bi-check-circle-fill me-1"></i> {{ req.selected_option }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-hourglass-split me-1"></i> Pending Choice
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="small text-muted">{{ req.created_at.strftime('%d-%m-%Y %H:%M') }}</td>
+                                <td>
+                                    <a href="{{ url_for('farmer.results', request_id=req.id) }}" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-eye"></i> View Result
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-5 text-center text-muted">
+                    <i class="bi bi-inbox fs-1 text-secondary mb-3 d-block"></i>
+                    <h5 class="fw-bold">No requests submitted yet</h5>
+                    <p class="small">You haven't requested any crop selling advice yet. Submit your first crop details now!</p>
+                    <a href="{{ url_for('farmer.sell_crop') }}" class="btn btn-l2f mt-2">
+                        <i class="bi bi-plus-circle me-1"></i> Sell My Crop
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

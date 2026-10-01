@@ -1,0 +1,207 @@
+/* Local2Farm Custom Agricultural Stylesheet */
+:root {
+    --l2f-primary: #2e7d32;       /* Forest green */
+    --l2f-primary-dark: #1b5e20;  /* Deep green */
+    --l2f-primary-light: #4caf50; /* Fresh leaf green */
+    --l2f-accent: #f9a825;        /* Golden harvest */
+    --l2f-bg-soft: #f4f8f4;       /* Subtle green tint */
+    --l2f-card-bg: #ffffff;
+    --l2f-text-dark: #212529;
+    --l2f-text-muted: #616161;
+}
+
+body {
+    background-color: var(--l2f-bg-soft);
+    color: var(--l2f-text-dark);
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar-l2f {
+    background: linear-gradient(135deg, var(--l2f-primary-dark) 0%, var(--l2f-primary) 100%);
+    box-shadow: 0 3px 12px rgba(27, 94, 32, 0.2);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+}
+
+.brand-icon {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+/* Cards & Containers */
+.card-l2f {
+    background: var(--l2f-card-bg);
+    border: 1px solid rgba(46, 125, 50, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-l2f:hover {
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.1);
+}
+
+.card-header-l2f {
+    background: #e8f5e9;
+    border-bottom: 1px solid #c8e6c9;
+    font-weight: 600;
+    color: var(--l2f-primary-dark);
+    border-radius: 11px 11px 0 0 !important;
+}
+
+/* Stat Cards */
+.stat-card {
+    border-left: 5px solid var(--l2f-primary);
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: #e8f5e9;
+    color: var(--l2f-primary);
+}
+
+.stat-value {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #1b5e20;
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--l2f-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Buttons */
+.btn-l2f {
+    background-color: var(--l2f-primary);
+    color: white;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.6rem 1.4rem;
+    transition: background-color 0.2s;
+}
+
+.btn-l2f:hover {
+    background-color: var(--l2f-primary-dark);
+    color: white;
+}
+
+.btn-l2f-lg {
+    padding: 0.8rem 1.8rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+}
+
+/* Badges for Waste Risk */
+.badge-waste-low {
+    background-color: #2e7d32;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+}
+
+.badge-waste-medium {
+    background-color: #f57f17;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+}
+
+.badge-waste-high {
+    background-color: #d32f2f;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+}
+
+/* AI Recommendation Callout */
+.ai-recommendation-box {
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border: 2px solid #81c784;
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.ai-badge {
+    position: absolute;
+    top: -12px;
+    left: 24px;
+    background: #1b5e20;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 3px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Recommendation highlight row */
+.table-highlight-winner {
+    background-color: #e8f5e9 !important;
+    font-weight: 600;
+    border-left: 4px solid #2e7d32;
+}
+
+/* Footer */
+.footer-l2f {
+    background: #1b5e20;
+    color: #e8f5e9;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}
+
+.footer-l2f a {
+    color: #c8e6c9;
+    text-decoration: none;
+}
+
+.footer-l2f a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* Student Banner / Project Disclaimer */
+.project-banner {
+    background-color: #fff9c4;
+    border-bottom: 1px solid #fff176;
+    color: #f57f17;
+    font-size: 0.85rem;
+    padding: 6px 0;
+    font-weight: 600;
+    text-align: center;
+}
